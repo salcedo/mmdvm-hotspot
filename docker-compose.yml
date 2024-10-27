@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  mmdvm:
+    build:
+      context: mmdvm
+
+    devices:
+      - /dev/ttyAMA0
+
+    expose:
+      - "20011"
+      - "3200"
+
+    networks:
+      hotspot:
+        ipv4_address: 10.20.30.100
+
+    volumes:
+      - data:/data
+
+    restart: unless-stopped
+
+  updater:
+    build:
+      context: updater
+
+    network_mode: host
+
+    volumes:
+      - data:/data
+
+networks:
+  hotspot:
+    ipam:
+      driver: default
+      config:
+        - subnet: 10.20.30.0/24
+
+volumes:
+  data:
